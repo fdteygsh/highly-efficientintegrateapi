@@ -1,9 +1,14 @@
-function isSubsequence(s, t) {
-  let i = 0;
-  let j = 0;
-  while (i < s.length && j < t.length) {
-    if (s[i] === t[j]) i++;
-    j++;
+function findRedundantConnection(edges) {
+  const parent = new Array(edges.length + 1).fill(-1);
+  for (const edge of edges) {
+    const u = find(parent, edge[0]);
+    const v = find(parent, edge[1]);
+    if (u === v) return edge;
+    parent[u] = v;
   }
-  return i === s.length;
+  return [];
+}
+function find(parent, i) {
+  if (parent[i] === -1) return i;
+  return find(parent, parent[i]);
 }
