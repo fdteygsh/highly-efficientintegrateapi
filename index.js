@@ -1,25 +1,24 @@
-function ladderLength(beginWord, endWord, wordList) {
-  const wordSet = new Set(wordList);
-  if (!wordSet.has(endWord)) return 0;
-  let count = 0;
-  const queue = [beginWord];
-  while (queue.length) {
-    const size = queue.length;
-    count++;
-    for (let i = 0; i < size; i++) {
-      const current = queue.shift();
-      if (current === endWord) return count;
-      for (let j = 0; j < current.length; j++) {
-        for (let k = 97; k <= 122; k++) {
-          const newWord =
-            current.slice(0, j) + String.fromCharCode(k) + current.slice(j + 1);
-          if (wordSet.has(newWord)) {
-            queue.push(newWord);
-            wordSet.delete(newWord);
-          }
-        }
-      }
+function isValidSudoku(board) {
+  const rows = Array(9)
+    .fill()
+    .map(() => new Set());
+  const cols = Array(9)
+    .fill()
+    .map(() => new Set());
+  const boxes = Array(9)
+    .fill()
+    .map(() => new Set());
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      const num = board[i][j];
+      if (num === ".") continue;
+      const boxIndex = Math.floor(i / 3) * 3 + Math.floor(j / 3);
+      if (rows[i].has(num) || cols[j].has(num) || boxes[boxIndex].has(num))
+        return false;
+      rows[i].add(num);
+      cols[j].add(num);
+      boxes[boxIndex].add(num);
     }
   }
-  return 0;
+  return true;
 }
